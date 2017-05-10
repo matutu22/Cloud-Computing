@@ -1,0 +1,9 @@
+---
+- hosts: "{{hosts}}"
+  sudo: yes
+  tasks:
+
+  - name: Check disk usage
+    shell: "(df -h)"
+    register: df
+  - debug: var=df.stdout_lines

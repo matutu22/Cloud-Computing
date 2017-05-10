@@ -1,0 +1,93 @@
+---
+- hosts: res
+  tasks:
+  - name: Run Stanford Corenlp on Server RES for finance analysis
+    shell: "(nohup java -mx4g -cp '*' edu.stanford.nlp.pipeline.StanfordCoreNLPServer -port 9009 -timeout 15000 &)" 
+    args:
+      chdir: /home/ubuntu/stanford-corenlp-full-2016-10-31/
+    register: nlp
+    tags: start_nlp
+  - debug: var=nlp.stdout_lines
+
+- hosts: allservers
+  tasks:
+
+  - name: Run Stanford Corenlp on all 4 Servers
+    shell: "(nohup java -mx4g -cp '*' edu.stanford.nlp.pipeline.StanfordCoreNLPServer -port 9000 -timeout 15000 &)" 
+    args:
+      chdir: /home/ubuntu/stanford-corenlp-full-2016-10-31/
+    register: nlp
+    tags: start_nlp
+  - debug: var=nlp.stdout_lines
+  
+  - name: Set google cloud environment
+    environment:
+      GOOGLE_APPLICATION_CREDENTIALS: /home/ubuntu/Cloudcomputing-cd6482d4da27.json
+    shell: "{{item}}"
+    with_items:
+      - "(nohup python analysis.py  &)"
+
+  
+- hosts: har
+  tasks:
+
+  - name: Run ASX 200 and finance harvest on HAR
+    shell: "{{item}}"
+    with_items:
+      - "(nohup java -jar getASX200.jar -a 115.146.93.219 -p 8008 -pa 115.146.93.224 -pp 8888 &)"
+      - "(nohup java -jar getfollowerAPI.jar &)"
+
+- hosts: cdb
+  tasks:
+
+  - name: Run ASX 200 and finance harvest on CDB
+    shell: "{{item}}"
+    with_items:
+      - "(nohup java -jar getASX200.jar -a 115.146.93.224 -p 8888 -pa 115.146.93.219 -pp 8008 &)"
+
+- hosts: har
+  tasks:
+
+  - name: Run starter.jar on har
+    shell: "(nohup java -jar starter.jar &)"
+
+
+- hosts: res
+  tasks:
+
+  - name: run twitter harvest program Adelaide on RES
+    shell: "{{item}}"
+    with_items: 
+      - "(nohup python /home/ubuntu/search/rest_ade.py >/dev/null 2>&1 &)" 
+      - "(nohup python /home/ubuntu/streaming/twitter_streaming_ade.py >/dev/null 2>&1 &)"
+    tags: res
+
+- hosts: cdb
+  tasks:
+
+  - name: run twitter harvest program  Brisbane on CDB
+    shell: "{{item}}"
+    with_items: 
+      - "(cd /home/ubuntu/search; nohup python rest_bris.py >/dev/null 2>&1 &)" 
+      - "(cd /home/ubuntu/streaming; nohup python twitter_streaming_bris.py >/dev/null 2>&1 &)"
+    tags: cdb
+
+- hosts: ana
+  tasks:
+
+  - name: run twitter harvest program  Sydney on ANA
+    shell: "{{item}}"
+    with_items: 
+      - "(cd /home/ubuntu/search; nohup python rest_syd.py >/dev/null 2>&1 &)" 
+      - "(cd /home/ubuntu/streaming; nohup python twitter_streaming_syd.py >/dev/null 2>&1 &)"
+    tags: ana
+
+- hosts: har
+  tasks:
+
+  - name: run twitter harvest program  Melbourne on CDB
+    shell: "{{item}}"
+    with_items: 
+      - "(cd /home/ubuntu/search; nohup python rest_mel.py >/dev/null 2>&1 &)" 
+      - "(cd /home/ubuntu/streaming; nohup python twitter_streaming_mel.py >/dev/null 2>&1 &)"
+    tags: cdb

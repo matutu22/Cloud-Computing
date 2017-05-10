@@ -1,0 +1,95 @@
+---
+- hosts: allservers
+  sudo: yes
+  vars:
+     python_packages_to_install:
+       - tweepy
+       - jsonpickle
+       - couchdb
+       - ansible
+       - pycorenlp
+       - textblob
+       - matplotlib
+       - google.cloud
+
+  tasks:
+  - name: install python 2
+    raw: test -e /usr/bin/python || (apt -y update && apt install -y python)
+  - name: install pip
+    apt: name=python-pip state=latest
+  - name: install curl
+    apt: name=curl state=latest
+  - name: install java
+    apt: name=default-jre state=latest
+  - name: install openjdk8
+    apt: name=openjdk-8-jdk state=latest
+  - name: install python-tk
+    apt: name=python-tk state=latest
+
+  - name: NGINX | Installing NGINX repo rpm
+    yum:
+      name: http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm
+ 
+  - name: NGINX | Installing NGINX
+    yum:
+      name: nginx
+      state: latest
+ 
+  - name: NGINX | Starting NGINX
+    service:
+      name: nginx
+      state: started
+
+  - name: install scala
+    shell: "{{item}}"
+    with_items:
+      - "(sudo apt-get remove scala-library scala)"
+      - "(wget http://www.scala-lang.org/files/archive/scala-2.11.6.deb)"
+      - "(sudo dpkg -i scala-2.11.6.deb)"
+      - "(sudo apt-get update)"
+      - "(sudo apt-get install scala)"
+
+  - name: install couchdb
+    shell: "{{item}}"
+    with_items: 
+      - "(mkdir temp)"
+      - "(wget https://raw.githubusercontent.com/afiskon/install-couchdb/master/install-couchdb.sh -P /home/ubuntu/temp/)"
+    ignore_errors: yes
+
+  - name: install couchdb contd
+    shell: "(sh install-couchdb.sh)"
+    args:
+      chdir: /home/ubuntu/temp/
+    ignore_errors: yes
+
+  - name: set timezone to Melbourne
+    timezone:
+      name: Australia/Melbourne
+  
+  - name: "Install Python packages: {{ python_packages_to_install }}"
+    pip: name="{{ python_packages_to_install }}"
+    with_items: python_packages_to_install
+    ignore_errors: yes
+
+  - name: install apache2
+    apt: name=apache2 update_cache=no state=latest
+
+      
+  # install Google Cloud sdk
+  - name: Install Google SDK step 1
+    shell: "{{item}}"
+    with_items: 
+      - "(export CLOUD_SDK_REPO='cloud-sdk-$(lsb_release -c -s)')"
+      - "(echo 'deb https://packages.cloud.google.com/apt $CLOUD_SDK_REPO main' | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list)"
+      - "(curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -)"
+
+  - name: Check Coogle Cloud SDK
+    stat: path=/usr/local/google-cloud-sdk
+    register: sdk
+  - name: Install Google Cloud SDK step 2
+    environment:
+      CLOUDSDK_CORE_DISABLE_PROMPTS: 1
+      CLOUDSDK_INSTALL_DIR: /usr/local
+      CLOUDSDK_PYTHON: /usr/bin/python2.7
+    shell: get_url https://sdk.cloud.google.com | bash
+    when: not sdk.stat.exists

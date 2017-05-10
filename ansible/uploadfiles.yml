@@ -1,0 +1,161 @@
+---
+#mel
+- hosts: har
+  sudo: yes
+  tasks:
+
+  - name: Create directory on HAR
+    file: path=/home/ubuntu/{{item}} state=directory owner=ubuntu mode=0755
+    with_items: 
+      - search
+      - streaming
+
+  - name: Upload twitter search Melbourne file to har
+    copy: >
+      src=/Users/kevin/Documents/课件/cloudcomputing/project/search/{{item}}
+      dest=/home/ubuntu/search
+    with_items:
+      - rest_mel.py
+
+  - name: Upload twitter streaming Melbourne file to har
+    copy: >
+      src=/Users/kevin/Documents/课件/cloudcomputing/project/streaming/{{item}}
+      dest=/home/ubuntu/streaming
+    with_items:
+      - twitter_streaming_mel.py
+#syd
+- hosts: ana
+  sudo: yes
+  tasks:
+
+  - name: create directory on ANA
+    file: path=/home/ubuntu/{{item}} state=directory owner=ubuntu mode=0755
+    with_items: 
+      - search
+      - streaming
+
+  - name: Upload twitter search sydney file to ANA
+    copy: >
+      src=/Users/kevin/Documents/课件/cloudcomputing/project/search/{{item}}
+      dest=/home/ubuntu/search
+    with_items:
+      - rest_syd.py
+
+  - name: Upload twitter harvest streaming sydney file to ANA
+    copy: >
+      src=/Users/kevin/Documents/课件/cloudcomputing/project/streaming/{{item}}
+      dest=/home/ubuntu/streaming
+    with_items:
+      - twitter_streaming_syd.py
+
+#bris
+- hosts: cdb
+  sudo: yes
+  tasks:
+
+  - name: Create directory on CDB
+    file: path=/home/ubuntu/{{item}} state=directory owner=ubuntu mode=0755
+    with_items: 
+      - search
+      - streaming
+
+  - name: Upload twitter search Brisbane file to CDB
+    copy: >
+      src=/Users/kevin/Documents/课件/cloudcomputing/project/search/{{item}}
+      dest=/home/ubuntu/search
+    with_items:
+      - rest_bris.py
+
+  - name: Upload twitter streaming file to mel and ade server
+    copy: >
+      src=/Users/kevin/Documents/课件/cloudcomputing/project/streaming/{{item}}
+      dest=/home/ubuntu/streaming
+    with_items:
+      - twitter_streaming_bris.py
+
+#ade 
+- hosts: res
+  sudo: yes
+  tasks:
+
+  - name: Create directory on RES
+    file: path=/home/ubuntu/{{item}} state=directory owner=ubuntu mode=0755
+    with_items: 
+      - search
+      - streaming
+
+  - name: Upload twitter search file Adelaide to RES
+    copy: >
+      src=/Users/kevin/Documents/课件/cloudcomputing/project/search/{{item}}
+      dest=/home/ubuntu/search
+    with_items:
+      - rest_ade.py
+
+  - name: Upload twitter streaming Adelaide to RES
+    copy: >
+      src=/Users/kevin/Documents/课件/cloudcomputing/project/streaming/{{item}}
+      dest=/home/ubuntu/streaming
+    with_items:
+      - twitter_streaming_ade.py
+
+
+- hosts: allservers
+  sudo: yes
+  tasks:
+
+  - name: Upload twitter analysis program
+    copy: >
+      src=/Users/kevin/Documents/课件/cloudcomputing/project/analysis.py
+      dest=/home/ubuntu/
+
+  - name: Upload/Check Standford Corenlp on Server
+    copy: >
+      src=/Users/kevin/Documents/课件/cloudcomputing/包/stanford-corenlp-full-2016-10-31 
+      dest=/home/ubuntu/
+    tags: upload_nlp
+
+  - name: Upload google crediential
+    copy: >
+      src=/Users/kevin/Documents/课件/cloudcomputing/project/google/Cloudcomputing-cd6482d4da27.json
+      dest=/home/ubuntu/
+  - name: Upload polygon
+    copy: >
+      src=/Users/kevin/Documents/课件/cloudcomputing/project/data/polygon.json
+      dest=/home/ubuntu
+- hosts: res
+  sudo: yes
+  tasks:
+
+  - name: Upload finance analysis program
+    copy: >
+      src=/Users/kevin/Documents/课件/cloudcomputing/project/analysis_fin.py
+      dest=/home/ubuntu/
+
+- hosts: har
+  sudo: yes
+  tasks:
+
+  - name: Upload finance program
+    copy: >
+      src=/Users/kevin/Documents/课件/cloudcomputing/project/houzhenqian/{{item}}
+      dest=/home/ubuntu/
+    with_items:
+      - getASX200.jar
+      - starter.jar
+      - key
+      - KeyStore
+      - getfollowerAPI.jar
+
+- hosts: cdb
+  sudo: yes
+  tasks:
+
+  - name: Upload finance program backup
+    copy: >
+      src=/Users/kevin/Documents/课件/cloudcomputing/project/houzhenqian/{{item}}
+      dest=/home/ubuntu/
+    with_items:
+      - starter.jar
+      - key
+      - KeyStore   
+

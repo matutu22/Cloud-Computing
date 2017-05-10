@@ -1,0 +1,9 @@
+---
+- hosts: "{{hosts}}"
+  sudo: yes
+  tasks:
+
+  - name: Ps -efa
+    shell: "(ps -ef)"
+    register: ps
+  - debug: var=ps.stdout_lines
