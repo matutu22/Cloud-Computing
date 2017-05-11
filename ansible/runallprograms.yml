@@ -43,16 +43,20 @@
   tasks:
   
   - name : Run finance program
-    shell: "(nohup java -jar getfollowerAPI.jar &)"
+    shell: "{{item}}"
+    with_items:
+      - "(nohup python analysis_fin.py  &)"
+      - "(nohup java -jar getfollowerAPI.jar &)"
     
 - hosts: cdb
   tasks:
 
-  - name: Run ASX 200 and finance harvest on CDB
+  - name: Run ASX 200 backup on CDB
     shell: "{{item}}"
     with_items:
       - "(nohup java -jar getASX200.jar -a 115.146.93.224 -p 8888 -pa 115.146.93.219 -pp 8008 &)"
-
+    tags: ASX
+    
 - hosts: har
   tasks:
 
