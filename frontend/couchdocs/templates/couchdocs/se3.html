@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+{%load static %}
+<html>
+  <head>
+    <title>Scenario 3</title>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- css -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" media="screen" >
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" media="screen" >
+    <link href="{% static 'color/default.css' %}" rel="stylesheet" media="screen">
+	<script src="{% static 'js/modernizr.custom.js' %}"></script>
+	<script src="{% static 'js/echarts.min.js' %}"></script>
+
+    </head>
+  <body>
+	<div class="menu-area">
+        <div id="dl-menu" class="dl-menuwrapper">
+    		<button class="dl-trigger">Open Menu</button>
+    		<ul class="dl-menu">
+    			<li>
+    				<a href="index.html">Home</a>
+    			</li>
+    			<li><a href="index.html#about">Our Team</a></li>
+    			<li><a href="index.html#works">Scenarios</a>
+    				<ul class="dl-submenu">
+    					<li><a href="se1.html">Scenarios1</a></li>
+    					<li><a href="se2.html">Scenarios2</a></li>
+    					<li><a href="se3.html">Scenarios3</a></li>
+    					<li><a href="se4.html">Scenarios4</a></li>
+    					<li><a href="se5.html">Scenarios5</a></li>
+    					<li><a href="se6.html">Scenarios6</a></li>
+    				</ul>
+    			</li>
+    		</ul>
+    	</div><!-- /dl-menuwrapper -->
+	</div>	
+
+	  <!-- intro area -->	  
+	  <div id="introse">
+			<div class="intro-text">
+				<div class="container">
+					<div class="row">
+					<div class="col-md-12">
+						<div class="brand">
+							<h1><a href="index.html">TEAM 21</a></h1>
+							<div class="line-spacer"></div>
+							<p><span>Scenario 3 </span></p>
+						</div>
+					</div>
+					</div>
+				</div>
+		 	</div>	
+	 </div>
+	  
+
+	  
+	  
+	  <!-- About -->
+	  <section id="about" class="home-section bg-white">
+		<div class="container">
+			  <div class="row">
+				  <div class="col-md-offset-2 col-md-8">
+					<div class="section-heading">
+					 <h2>Scenario 3</h2>
+					 <p>The relationship bewieen the unmber of international tourist and the emotion of local people. </p>
+					</div>
+				  </div>
+			  </div>
+			  <div class="row">
+                <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+					<div class="box-team wow bounceInDown" id='pic_bar' align="center"  data-wow-delay="0.1s" style="width: 800px;height: 600px;"></div>
+					<script type="text/javascript">
+                	var myChart = echarts.init(document.getElementById('pic_bar'));
+					var data_val={{avg_senti|safe}},
+					    xAxis_val=['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+					var data_val1=[0,0,0,0,0,0,0];
+					var option = {
+					    backgroundColor:'#293042',
+					    grid:{
+					        left:10,
+					        top:'10%',
+					        bottom:20,
+					        right:40,
+					        containLabel:true
+					    },
+					    tooltip:{
+					        show:true,
+					        backgroundColor:'#384157',
+					        borderColor:'#384157',
+					        borderWidth:1,
+					        formatter:'{b}:{c}',
+					        extraCssText:'box-shadow: 0 0 5px rgba(0, 0, 0, 1)'
+					    },
+					    legend:{
+					        right:0,
+					        top:0,
+					        data:['sentiment'],
+					         textStyle:{
+					            color :'#5c6076'
+					        }
+					    },
+					    title: {
+					        text: 'sentiment of every day in a week',
+					        x:'4.5%',
+					        top: '1%',
+					        textStyle:{
+					        color :'#5c6076'
+					        }
+					    },
+					    xAxis: {
+					        data: xAxis_val,
+					        boundaryGap:false,
+					        axisLine:{
+					            show:false
+					        },
+					         axisLabel: {
+					            textStyle: {
+					                color: '#5c6076'
+					            }  
+					        },
+					        axisTick:{
+					            show:false
+					        }
+					    },
+					    yAxis: { 
+					        ayisLine:{
+					            show:false
+					        },
+					         axisLabel: {
+					            textStyle: {
+					                color: '#5c6076'
+					            }  
+					        },
+					        splitLine:{
+					            show:true,
+					            lineStyle:{
+					                color:'#2e3547'
+					            }
+					        },
+					        axisLine: {
+					                lineStyle: {
+					                    color: '#384157'
+					                }
+					            }
+					    },
+					    
+					    series: [
+					        {
+					            type: 'bar',
+					            name:'linedemo',
+					            
+					            
+					            tooltip:{
+					                show:false
+					            },
+					            animation:false,
+					            barWidth:1.4,
+					            hoverAnimation:false,
+					            data:data_val,
+					            itemStyle:{
+					                normal:{
+					                    color:'#f17a52',
+					                    opacity:0.6,
+					                    label:{
+					                        show:false
+					                    }
+					                }
+					            }
+					        },
+					        {
+					            type: 'line',
+					            name:'sentiment',
+					            
+					            animation:false,
+					            symbol:'circle',
+					    
+					            hoverAnimation:false,
+					            data:data_val1,
+					            itemStyle:{
+					                normal:{
+					                    color:'#f17a52',
+					                    opacity:0,
+					                }
+					            },
+					            lineStyle:{
+					                normal:{
+					                    width:1,
+					                    color:'#384157',
+					                    opacity:1
+					                }
+					            }
+					        },
+					        {
+					            type: 'line',
+					            name:'linedemo',
+					            smooth:true,
+					            symbolSize:10,
+					            animation:false,
+					            lineWidth:1.2,
+					            hoverAnimation:false,
+					            data:data_val,
+					            symbol:'circle',
+					            itemStyle:{
+					                normal:{
+					                    color:'#f17a52',
+					                    shadowBlur: 40,
+					                    label:{
+					                        show:true,
+					                        position:'top',
+					                        textStyle:{
+					                            color:'#f17a52',
+					                    
+					                        }
+					                    }
+					                }
+					            },
+					           areaStyle:{
+					                normal:{
+					                    color:'#f17a52',
+					                    opacity:0.08
+					                }
+					            }
+					            
+					        }
+					    ]
+					};
+myChart.setOption(option);
+
+
+					myChart.setOption(option)
+					</script>
+                    <h4>Tourist & Emotion</h4>
+                    <p>The relationship bewieen the unmber of international tourist and the emotion of local people.</p>
+                
+					</div>
+                </div>
+                
+			  </div>			  
+		  </div>	  
+	  </section>
+	  
+		<!-- spacer   
+		<section id="spacer1" class="home-section spacer">	
+           <div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="color-light">
+						<h2 class="wow bounceInDown" data-wow-delay="1s">Twitter ? Not just Twitts ! </h2>
+						<p class="lead wow bounceInUp" data-wow-delay="2s">We can do more !</p>	
+						</div>
+					</div>				
+				</div>
+            </div>
+		</section>	  -->	
+	  
+	  <!-- Services -->
+	  
+	
+		<!-- spacer 2 -->  
+		<section id="spacer2" class="home-section spacer">	
+           <div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="color-light">
+						<h2 class="wow bounceInDown" data-wow-delay="1s">Details are the key for perfection</h2>
+						<p class="lead wow bounceInUp" data-wow-delay="2s">data is the key of development</p>	
+						</div>
+					</div>				
+				</div>
+            </div>
+		</section>
+	  
+	 <!-- Contact -->
+	  <section id="contact" class="home-section bg-white">
+	  	<div class="container">
+			  <div class="row">
+				  <div class="col-md-offset-2 col-md-8">
+					<div class="section-heading">
+					 <h2>Contact us</h2>
+					 <p>If you have any problem or recommendation, please contact us by following email Address. </p>
+					 <p>Thebestteam@unimelb.edu.au. </p>
+					</div>
+				  </div>
+			  </div>
+
+	  		
+	
+	  			</div>
+	  		</div>
+			<div class="row mar-top30 ">
+				<div class="col-md-offset-2 col-md-8">
+					<h5>We're also on social networks</h5>
+					<ul class="social-network">
+						<li><a href="#">
+						<span class="fa-stack fa-2x">
+							<i class="fa fa-circle fa-stack-2x"></i>
+							<i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+						</span></a>
+						</li>
+						<li><a href="#">
+						<span class="fa-stack fa-2x">
+							<i class="fa fa-circle fa-stack-2x"></i>
+							<i class="fa fa-dribbble fa-stack-1x fa-inverse"></i>
+						</span></a>
+						</li>
+						<li><a href="#">
+						<span class="fa-stack fa-2x">
+							<i class="fa fa-circle fa-stack-2x"></i>
+							<i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+						</span></a>
+						</li>
+						<li><a href="#">
+						<span class="fa-stack fa-2x">
+							<i class="fa fa-circle fa-stack-2x"></i>
+							<i class="fa fa-pinterest fa-stack-1x fa-inverse"></i>
+						</span></a>
+						</li>
+					</ul>
+				</div>				
+			</div>
+
+	  	</div>
+	  </section>  
+
+	<footer>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					<p>&copy; Cluster and Cloud Computing Team 21. All Rights Reserved</p>
+                    <div class="credits">
+                        <a href="http://www.unimelb.edu.au/">The  University of Melbourne</a>
+                    </div>
+				</div>
+			</div>		
+		</div>	
+	</footer>
+	 
+	 <!-- js -->
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+	<script src="{% static 'js/jquery.smooth-scroll.min.js' %}"></script>
+	<script src="{% static 'js/jquery.dlmenu.js' %}"></script>
+	<script src="{% static 'js/wow.min.js' %}"></script>
+	<script src="{% static 'js/custom.js'%}"></script>
+    <script src="{% static 'contactform/contactform.js' %}"></script>
+    
+    
+  </body>
+</html>

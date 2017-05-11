@@ -1,0 +1,7 @@
+1. ASX sentiment: 
+2. temp sentiment
+3. income sentiment
+4. hospital sentiment
+5. night sentiment
+6. week day sentiment
+
