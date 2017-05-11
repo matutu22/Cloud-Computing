@@ -23,6 +23,14 @@
       dest=/home/ubuntu/streaming
     with_items:
       - twitter_streaming_mel.py
+
+  - name: Upload data
+    copy: >
+      src=/Users/kevin/Documents/课件/cloudcomputing/project/data
+      dest=/home/ubuntu/
+
+  - name: Run save data python to save suburb data
+    shell: "(python /home/ubuntu/data/savedata.py)"
 #syd
 - hosts: ana
   sudo: yes

@@ -11,6 +11,11 @@
        - textblob
        - matplotlib
        - google.cloud
+       - Django
+       - djangorestframework
+       - markdown 
+       - django-filter      
+
 
   tasks:
   - name: install python 2
