@@ -10,53 +10,83 @@
        - pycorenlp
        - textblob
        - matplotlib
-       - google.cloud
        - Django
        - djangorestframework
        - markdown 
-       - django-filter      
-
+       - django-filter
+   
 
   tasks:
   - name: install python 2
     raw: test -e /usr/bin/python || (apt -y update && apt install -y python)
+ 
   - name: install pip
     apt: name=python-pip state=latest
+
   - name: install curl
     apt: name=curl state=latest
+
   - name: install java
     apt: name=default-jre state=latest
+
   - name: install openjdk8
     apt: name=openjdk-8-jdk state=latest
+
   - name: install python-tk
     apt: name=python-tk state=latest
 
-  - name: NGINX | Installing NGINX repo rpm
-    yum:
-      name: http://nginx.org/packages/centos/7/noarch/RPMS/nginx-release-centos-7-0.el7.ngx.noarch.rpm
+  - name: NGINX | Adding NGINX signing key
+    apt_key: url=http://nginx.org/keys/nginx_signing.key state=present
+ 
+  - name: NGINX | Adding sources.list deb url for NGINX
+    lineinfile: dest=/etc/apt/sources.list line="deb http://nginx.org/packages/mainline/ubuntu/ trusty nginx"
+ 
+  - name: NGINX Plus | Adding sources.list deb-src url for NGINX
+    lineinfile: dest=/etc/apt/sources.list line="deb-src http://nginx.org/packages/mainline/ubuntu/ trusty nginx"
+ 
+  - name: NGINX | Updating apt cache
+    apt:
+      update_cache: yes
  
   - name: NGINX | Installing NGINX
-    yum:
-      name: nginx
+    apt:
+      pkg: nginx
       state: latest
-    ignore_errors: yes
-
+ 
   - name: NGINX | Starting NGINX
     service:
       name: nginx
       state: started
+
+  - name: "Install Python packages: {{ python_packages_to_install }}"
+    pip: name="{{item}}"
+    with_items: 
+      - tweepy
+      - jsonpickle
+      - couchdb
+      - ansible
+      - pycorenlp
+      - textblob
+      - matplotlib
+      - Django
+      - djangorestframework
+      - markdown 
+      - django-filter 
+    ignore_errors: yes
+
+  - name: Install google.cloud
+    pip: name=google.cloud state=latest
     ignore_errors: yes
 
   - name: install scala
     shell: "{{item}}"
     with_items:
-      - "(sudo apt-get remove scala-library scala)"
       - "(wget http://www.scala-lang.org/files/archive/scala-2.11.6.deb)"
       - "(sudo dpkg -i scala-2.11.6.deb)"
       - "(sudo apt-get update)"
-      - "(sudo apt-get install scala)"
-    ignore_errors: yes
-    
+      
+  - name: install scala
+    apt: name=scala
   - name: install couchdb
     shell: "{{item}}"
     with_items: 
@@ -73,17 +103,10 @@
   - name: set timezone to Melbourne
     timezone:
       name: Australia/Melbourne
-  
-  - name: "Install Python packages: {{ python_packages_to_install }}"
-    pip: name="{{ python_packages_to_install }}"
-    with_items: python_packages_to_install
-    ignore_errors: yes
 
   - name: install apache2
     apt: name=apache2 update_cache=no state=latest
-    
-  - name: ensure apache is running (and enable it at boot)
-    service: name=httpd state=started enabled=yes
+
       
   # install Google Cloud sdk
   - name: Install Google SDK step 1
