@@ -18,6 +18,7 @@ with open ('polygon.json') as data_file:
     polygon=json.load(data_file)
 language_client = language.Client()
 
+#Connect to couchdb server
 couch = couchdb.Server('http://127.0.0.1:5984')
 data_db = couch['twitter_data']
 result_db = couch['suburb_data']
@@ -28,6 +29,7 @@ sports=['football','basketball','soccer','cricket','baseball','tennis','rugby','
 outdoor=['outdoor', 'camping','trekking','swimming','surfing','running','cycling','climbing','hiking','fishing']
 keywords={'fitness':fitness,'sports':sports,'outdoor':outdoor}
 
+# Connect to NLP server
 nlp = StanfordCoreNLP('http://localhost:9000')
 print ' Connect to NLP server '
 q1=Queue.Queue()
@@ -40,6 +42,7 @@ def dowork(q):
     while True:
         while not q.empty():
             print "Read from queue"
+            #read from queue
             try:
                 queue_data = q.get()
 
@@ -77,7 +80,7 @@ def dowork(q):
                             postcode = str(a['properties']['postcode'].encode('ascii'))
                             print ("%s in %s" %(bbPath.contains_point(coordinates),a['properties']['postcode']))
                             break
-                    
+                    # Search for keywords
                     for k in keywords:
                         for b in keywords.get(k):
                             if b in text.lower():             
@@ -114,6 +117,7 @@ def dowork(q):
                 if plaintext != '' and count_tweet_sentence == 0:
                     count_tweet_sentence = 1
                 if count_tweet_sentence != 0:
+                    # Calculate sentiment value
 
                     average_sentiment_value= sentiment_value/count_tweet_sentence
                 if sentiment_value/count_tweet_sentence == 0:
@@ -169,6 +173,7 @@ def tcplink(sock, addr):
         if data == 'exit' :
             break
         if data:
+            # Distribute work to threads
             x = random.randint(1,5)
             if x == 1:
                 q1.put(data)
@@ -194,6 +199,7 @@ s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind(('0.0.0.0',9999))
 s.listen(15)
 
+# start 5 worker threads
 a=threading.Thread(target=dowork,args=(q1,))
 a.start()
 print " Start process 1 analyzing message"
@@ -210,6 +216,7 @@ e=threading.Thread(target=dowork,args=(q5,))
 e.start()
 print " Start process 5 analyzing message"
 
+# Continuely listen for harvest program connection
 while True:
     sock, addr = s.accept()
     t = threading.Thread(target=tcplink, args=(sock, addr))
