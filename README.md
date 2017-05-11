@@ -43,3 +43,7 @@ Minhan Yan           ID: 805103
 * Note that in order to run the program, the system need to run Corenlp server in advance which is configured in runprograms.yml.
 * For checking disk space statistics, run “checkdisk.yml” with additional variables：`--extra-vars “hosts=xxx”` to check VM xxx. 
 * For checking and manage processes, run “checkprocess.yml” with additional variables：`--extra-vars “hosts=xxx”` to check VM xxx. 
+------------
+[Stanford Corenlp](https://stanfordnlp.github.io/CoreNLP/index.html)
+
+This system requires Stanford Corenlp downloaded and run as server.
