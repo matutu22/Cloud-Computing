@@ -39,11 +39,13 @@
     yum:
       name: nginx
       state: latest
- 
+    ignore_errors: yes
+
   - name: NGINX | Starting NGINX
     service:
       name: nginx
       state: started
+    ignore_errors: yes
 
   - name: install scala
     shell: "{{item}}"
@@ -53,7 +55,8 @@
       - "(sudo dpkg -i scala-2.11.6.deb)"
       - "(sudo apt-get update)"
       - "(sudo apt-get install scala)"
-
+    ignore_errors: yes
+    
   - name: install couchdb
     shell: "{{item}}"
     with_items: 
@@ -78,7 +81,9 @@
 
   - name: install apache2
     apt: name=apache2 update_cache=no state=latest
-
+    
+  - name: ensure apache is running (and enable it at boot)
+    service: name=httpd state=started enabled=yes
       
   # install Google Cloud sdk
   - name: Install Google SDK step 1
