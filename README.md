@@ -25,7 +25,7 @@ Minhan Yan           ID: 805103
 * Analysis.py: Analysis program.
 * Analysis_fin.py: Analysis collected finance related tweets program.
 * Jars: Java jars for ASX200 and get followers collecting tweets.
-
+* Frontend folder: Contains front end presentation build by Django.
 --------------
 ## Test instructions
 
