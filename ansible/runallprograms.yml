@@ -31,12 +31,20 @@
 - hosts: har
   tasks:
 
-  - name: Run ASX 200 and finance harvest on HAR
+  - name: Run ASX 200 harvest on HAR
     shell: "{{item}}"
     with_items:
       - "(nohup java -jar getASX200.jar -a 115.146.93.219 -p 8008 -pa 115.146.93.224 -pp 8888 &)"
-      - "(nohup java -jar getfollowerAPI.jar &)"
 
+    tags: ASX
+    
+    
+- hosts: res
+  tasks:
+  
+  - name : Run finance program
+    shell: "(nohup java -jar getfollowerAPI.jar &)"
+    
 - hosts: cdb
   tasks:
 
