@@ -47,3 +47,6 @@ Minhan Yan           ID: 805103
 [Stanford Corenlp](https://stanfordnlp.github.io/CoreNLP/index.html)
 
 This system requires Stanford Corenlp downloaded and run as server.
+
+## Youtube Link
+* https://youtu.be/dM-csF9tm4g
